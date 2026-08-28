@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Check, Lightbulb, LoaderCircle, X } from "lucide-react";
+import { Check, Lightbulb, LoaderCircle, Lock, X } from "lucide-react";
 import {
   actionShipment,
   getShipmentDetail,
@@ -10,6 +10,8 @@ import {
 import FactorBreakdown from "./FactorBreakdown";
 import ModeIcon from "./ModeIcon";
 import RiskBadge from "./RiskBadge";
+import RecalculateButton from "./RecalculateButton";
+import { useRole } from "../context/RoleContext";
 
 const cash = (amount) =>
   new Intl.NumberFormat("en-US", {
@@ -26,9 +28,15 @@ const adjustedEta = (date) =>
         minute: "2-digit",
       }).format(new Date(date))
     : "—";
+const relativeTime = (date) => {
+  if (!date || Number.isNaN(new Date(date).getTime())) return "baseline in use";
+  const minutes = Math.max(0, Math.round((Date.now() - new Date(date)) / 60_000));
+  return minutes < 1 ? "just now" : minutes < 60 ? `${minutes}m ago` : `${Math.round(minutes / 60)}h ago`;
+};
 
 /** Lazy-loaded slide-over, including explicit recalculation and action mutations. */
 export default function DetailPanel({ shipmentId, onClose }) {
+  const { permissions } = useRole();
   const queryClient = useQueryClient();
   const [actioned, setActioned] = useState(false);
   const [toast, setToast] = useState("");
@@ -62,6 +70,10 @@ export default function DetailPanel({ shipmentId, onClose }) {
     },
   });
   const data = query.data;
+  const freshness = data?.dataFreshness;
+  const liveSignals = freshness?.liveSignalsUsed ?? 0;
+  const fallbackSignals = freshness?.fallbackSignalsUsed ?? 0;
+  const simulatedSignals = data?.breakdown?.historicalDelayRate ? 1 : 0;
   return (
     <>
       <div
@@ -115,6 +127,7 @@ export default function DetailPanel({ shipmentId, onClose }) {
         )}
         {data && (
           <div className="space-y-6 p-6">
+            <div title="Signal provenance is shown for transparent live-data coverage." className="flex items-center gap-1.5 rounded-md border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600"><span className="font-semibold text-ups-brown">Data freshness:</span> {liveSignals} live signal{liveSignals === 1 ? "" : "s"} · {simulatedSignals} simulated · {fallbackSignals ? `${fallbackSignals} estimated · ` : ""}last updated {relativeTime(freshness?.lastLiveFetch)}</div>
             <div
               title="The overall risk score is calculated from the factor breakdown below."
               className="flex items-end justify-between"
@@ -133,15 +146,12 @@ export default function DetailPanel({ shipmentId, onClose }) {
                 riskScore={data.riskScore}
               />
             </div>
-            <div className="hover-card grid grid-cols-3 divide-x divide-stone-200 rounded-lg bg-stone-50 py-3 text-center">
+            <div className={`hover-card grid ${permissions.canViewCost ? "grid-cols-3" : "grid-cols-2"} divide-x divide-stone-200 rounded-lg bg-stone-50 py-3 text-center`}>
               <Metric
                 label="Breach probability"
                 value={`${data.sla?.breachProbability ?? "—"}%`}
               />
-              <Metric
-                label="Cost exposure"
-                value={cash(data.sla?.cost?.expectedCost)}
-              />
+              {permissions.canViewCost && <Metric label="Cost exposure" value={cash(data.sla?.cost?.expectedCost)} />}
               <Metric
                 label="Suggested buffer"
                 value={`${data.sla?.buffer?.bufferHours ?? "—"}h`}
@@ -150,7 +160,7 @@ export default function DetailPanel({ shipmentId, onClose }) {
             <p className="-mt-4 text-center text-xs text-stone-500">
               Adjusted ETA: {adjustedEta(data.sla?.buffer?.adjustedEta)}
             </p>
-            <FactorBreakdown breakdown={data.breakdown} />
+            {permissions.canViewBreakdown ? <FactorBreakdown breakdown={data.breakdown} /> : <div title="Detailed risk breakdown restricted to ops/management roles." className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 p-4 text-sm text-stone-500"><Lock size={16} /> Detailed risk breakdown restricted to ops/management roles.</div>}
             <div className="hover-card rounded-lg border border-amber-200 bg-amber-50 p-4">
               <div className="flex gap-2">
                 <Lightbulb
@@ -173,32 +183,22 @@ export default function DetailPanel({ shipmentId, onClose }) {
               </div>
             )}
             <div className="flex gap-3">
-              <button
-                title="Refresh the risk score using the latest available signals."
-                onClick={() => recalculate.mutate()}
-                disabled={recalculate.isPending}
-                className="flex flex-1 items-center justify-center gap-2 rounded-md border border-ups-brown px-4 py-2.5 text-sm font-bold text-ups-brown disabled:opacity-60"
-              >
-                {recalculate.isPending && (
-                  <LoaderCircle className="animate-spin" size={16} />
-                )}
-                {recalculate.isPending ? "Refreshing" : "Recalculate"}
-              </button>
+              <RecalculateButton allowed={permissions.canRecalculate} pending={recalculate.isPending} onClick={() => recalculate.mutate()} />
               <button
                 title={
                   actioned
                     ? "This shipment has already been actioned."
-                    : "Mark this shipment actioned and record its estimated savings."
+                    : permissions.canMarkActioned ? "Mark this shipment actioned and record its estimated savings." : "Requires Dispatcher access."
                 }
                 onClick={() => action.mutate()}
-                disabled={actioned || action.isPending}
-                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-ups-gold px-4 py-2.5 text-sm font-bold text-ups-brown disabled:cursor-not-allowed disabled:opacity-55"
+                disabled={actioned || action.isPending || !permissions.canMarkActioned}
+                className="flex flex-1 items-center justify-center gap-2 rounded-md bg-ups-gold px-4 py-2.5 text-sm font-bold text-ups-brown disabled:cursor-not-allowed disabled:bg-stone-200 disabled:text-stone-500 disabled:opacity-100"
               >
                 {actioned ? (
                   <>
                     <Check size={16} /> Actioned
                   </>
-                ) : action.isPending ? (
+                ) : !permissions.canMarkActioned ? <><Lock size={16} /> Mark Actioned</> : action.isPending ? (
                   <LoaderCircle className="animate-spin" size={16} />
                 ) : (
                   "Mark Actioned"

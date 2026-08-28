@@ -8,7 +8,7 @@
       "destinationCountry": "USA",
       "mode": "sea",
       "eta": "2026-09-15T10:00:00.000Z",
-      "riskScore": 5,
+      "riskScore": 6,
       "riskLevel": "medium"
     },
     {
@@ -32,6 +32,207 @@
       "eta": "2026-09-15T18:00:00.000Z",
       "riskScore": 3,
       "riskLevel": "low"
+    },
+    {
+      "id": "SHP004",
+      "origin": "Chennai",
+      "destination": "Mumbai",
+      "originCountry": "India",
+      "destinationCountry": "India",
+      "originAirport": "MAA",
+      "destinationAirport": "BOM",
+      "mode": "air",
+      "eta": "2026-09-02T10:00:00.000Z",
+      "riskScore": 8,
+      "riskLevel": "high"
+    },
+    {
+      "id": "SHP002",
+      "origin": "Delhi",
+      "destination": "Bangalore",
+      "originCountry": "India",
+      "destinationCountry": "India",
+      "originAirport": "DEL",
+      "destinationAirport": "BLR",
+      "mode": "air",
+      "eta": "2026-09-03T12:00:00.000Z",
+      "riskScore": 6,
+      "riskLevel": "medium"
+    },
+    {
+      "id": "SHP007",
+      "origin": "Kolkata",
+      "destination": "Chennai",
+      "originCountry": "India",
+      "destinationCountry": "India",
+      "originAirport": "CCU",
+      "destinationAirport": "MAA",
+      "mode": "air",
+      "eta": "2026-09-04T08:00:00.000Z",
+      "riskScore": 7,
+      "riskLevel": "high"
+    }
+  ],
+  "historicalRoutes": [
+    {
+      "origin": "Shanghai",
+      "destination": "Los Angeles",
+      "mode": "sea",
+      "totalShipments": 247,
+      "delayedShipments": 62,
+      "avgDelayHours": 36
+    },
+    {
+      "origin": "Shanghai",
+      "destination": "Los Angeles",
+      "mode": "air",
+      "totalShipments": 189,
+      "delayedShipments": 28,
+      "avgDelayHours": 8
+    },
+    {
+      "origin": "London",
+      "destination": "New York",
+      "mode": "air",
+      "totalShipments": 312,
+      "delayedShipments": 47,
+      "avgDelayHours": 6
+    },
+    {
+      "origin": "London",
+      "destination": "New York",
+      "mode": "sea",
+      "totalShipments": 156,
+      "delayedShipments": 31,
+      "avgDelayHours": 48
+    },
+    {
+      "origin": "Mumbai",
+      "destination": "Dubai",
+      "mode": "ground",
+      "totalShipments": 89,
+      "delayedShipments": 12,
+      "avgDelayHours": 4
+    },
+    {
+      "origin": "Mumbai",
+      "destination": "Dubai",
+      "mode": "air",
+      "totalShipments": 203,
+      "delayedShipments": 15,
+      "avgDelayHours": 3
+    },
+    {
+      "origin": "Singapore",
+      "destination": "Rotterdam",
+      "mode": "sea",
+      "totalShipments": 178,
+      "delayedShipments": 44,
+      "avgDelayHours": 42
+    },
+    {
+      "origin": "Singapore",
+      "destination": "Los Angeles",
+      "mode": "sea",
+      "totalShipments": 134,
+      "delayedShipments": 19,
+      "avgDelayHours": 24
+    },
+    {
+      "origin": "Hong Kong",
+      "destination": "Los Angeles",
+      "mode": "air",
+      "totalShipments": 267,
+      "delayedShipments": 38,
+      "avgDelayHours": 5
+    },
+    {
+      "origin": "Frankfurt",
+      "destination": "Chicago",
+      "mode": "air",
+      "totalShipments": 145,
+      "delayedShipments": 22,
+      "avgDelayHours": 7
+    },
+    {
+      "origin": "Dubai",
+      "destination": "Shanghai",
+      "mode": "sea",
+      "totalShipments": 98,
+      "delayedShipments": 34,
+      "avgDelayHours": 54
+    },
+    {
+      "origin": "Los Angeles",
+      "destination": "Tokyo",
+      "mode": "air",
+      "totalShipments": 167,
+      "delayedShipments": 18,
+      "avgDelayHours": 4
+    },
+    {
+      "origin": "Rotterdam",
+      "destination": "New York",
+      "mode": "sea",
+      "totalShipments": 123,
+      "delayedShipments": 28,
+      "avgDelayHours": 30
+    },
+    {
+      "origin": "Chennai",
+      "destination": "Singapore",
+      "mode": "sea",
+      "totalShipments": 76,
+      "delayedShipments": 21,
+      "avgDelayHours": 18
+    },
+    {
+      "origin": "Sydney",
+      "destination": "Los Angeles",
+      "mode": "air",
+      "totalShipments": 92,
+      "delayedShipments": 11,
+      "avgDelayHours": 6
+    },
+    {
+      "origin": "Toronto",
+      "destination": "London",
+      "mode": "air",
+      "totalShipments": 134,
+      "delayedShipments": 16,
+      "avgDelayHours": 5
+    },
+    {
+      "origin": "Busan",
+      "destination": "Los Angeles",
+      "mode": "sea",
+      "totalShipments": 112,
+      "delayedShipments": 25,
+      "avgDelayHours": 28
+    },
+    {
+      "origin": "Hamburg",
+      "destination": "Shanghai",
+      "mode": "sea",
+      "totalShipments": 87,
+      "delayedShipments": 19,
+      "avgDelayHours": 36
+    },
+    {
+      "origin": "Dallas",
+      "destination": "Frankfurt",
+      "mode": "air",
+      "totalShipments": 156,
+      "delayedShipments": 23,
+      "avgDelayHours": 7
+    },
+    {
+      "origin": "Vancouver",
+      "destination": "Tokyo",
+      "mode": "sea",
+      "totalShipments": 67,
+      "delayedShipments": 8,
+      "avgDelayHours": 12
     }
   ]
 }

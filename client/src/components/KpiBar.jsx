@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { AlertTriangle, CircleDollarSign, ShieldCheck } from "lucide-react";
+import { AlertTriangle, CircleDollarSign, Lock, Radio, ShieldCheck } from "lucide-react";
+import PropTypes from "prop-types";
 import { getSlaSummary } from "../api/shipments";
+import { useRole } from "../context/RoleContext";
 
-const cards = (data) => [
+const cards = (data, coverage) => [
   {
     label: "High Risk",
     value: data.highRiskCount,
@@ -31,6 +33,13 @@ const cards = (data) => [
     icon: ShieldCheck,
     iconColor: "text-green-600",
   },
+  {
+    label: "Live Data Coverage",
+    value: coverage === null ? "—" : `${coverage}%`,
+    border: "border-green-600",
+    icon: Radio,
+    iconColor: "text-green-600",
+  },
 ];
 const money = (value) =>
   new Intl.NumberFormat("en-US", {
@@ -40,16 +49,24 @@ const money = (value) =>
   }).format(value || 0);
 
 /** Fleet-level SLA metrics, independently cached through React Query. */
-export default function KpiBar() {
+export default function KpiBar({ shipments = [] }) {
+  const { permissions } = useRole();
+  const coverageItems = shipments.map((shipment) => shipment.dataFreshness).filter(Boolean).map(({ liveSignalsUsed = 0, fallbackSignalsUsed = 0 }) => {
+    const total = liveSignalsUsed + fallbackSignalsUsed;
+    return total ? (liveSignalsUsed / total) * 100 : null;
+  }).filter((value) => value !== null);
+  const coverage = coverageItems.length ? Math.round(coverageItems.reduce((total, value) => total + value, 0) / coverageItems.length) : null;
   const { data, isLoading, isError } = useQuery({
     queryKey: ["sla-summary"],
     queryFn: getSlaSummary,
     staleTime: 60_000,
+    enabled: permissions.canViewKpiBar,
   });
+  if (!permissions.canViewKpiBar) return <div title="KPI summary requires elevated access." className="flex items-center gap-2 rounded-lg border border-stone-200 bg-white p-5 text-sm text-stone-500 shadow-sm"><Lock size={17} /> KPI summary requires elevated access</div>;
   if (isLoading)
     return (
-      <div className="grid grid-cols-4 gap-4">
-        {Array.from({ length: 4 }, (_, i) => (
+      <div className="grid grid-cols-5 gap-4">
+        {Array.from({ length: 5 }, (_, i) => (
           <div key={i} className="h-24 animate-pulse rounded-lg bg-stone-200" />
         ))}
       </div>
@@ -61,8 +78,8 @@ export default function KpiBar() {
       </div>
     );
   return (
-    <section className="grid grid-cols-4 gap-4" aria-label="Fleet KPIs">
-      {cards(data).map(({ label, value, border, icon: Icon, iconColor }) => (
+    <section className="grid grid-cols-5 gap-4" aria-label="Fleet KPIs">
+      {cards(data, coverage).map(({ label, value, border, icon: Icon, iconColor }) => (
         <article
           key={label}
           title={`${label}: ${value}. Data comes from the current shipment fleet.`}
@@ -80,3 +97,4 @@ export default function KpiBar() {
     </section>
   );
 }
+KpiBar.propTypes = { shipments: PropTypes.arrayOf(PropTypes.object) };
