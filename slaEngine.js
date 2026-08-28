@@ -119,32 +119,3 @@ module.exports = {
   getFleetSummary,
   enrichShipmentWithSLA
 };
-
-const sampleShipment = {
-  id: 'SHP-2026-001',
-  origin: 'Shanghai',
-  destination: 'Los Angeles',
-  originCountry: 'China',
-  destinationCountry: 'USA',
-  mode: 'air',
-  eta: new Date(Date.now() + 3 * 3600 * 1000).toISOString(),
-  riskScore: 8,
-  riskLevel: 'high',
-  breakdown: {}
-};
-
-const enriched = enrichShipmentWithSLA(sampleShipment);
-console.log('=== Enriched Shipment ===');
-console.log(JSON.stringify(enriched, null, 2));
-
-const fleet = [
-  { id: 'S1', riskScore: 2, riskLevel: 'low', mode: 'sea', eta: new Date(Date.now() + 10 * 3600 * 1000).toISOString() },
-  { id: 'S2', riskScore: 5, riskLevel: 'medium', mode: 'air', eta: new Date(Date.now() + 5 * 3600 * 1000).toISOString() },
-  { id: 'S3', riskScore: 8, riskLevel: 'high', mode: 'ground', eta: new Date(Date.now() + 2 * 3600 * 1000).toISOString() },
-  { id: 'S4', riskScore: 9, riskLevel: 'high', mode: 'air', eta: new Date(Date.now() + 4 * 3600 * 1000).toISOString() },
-  { id: 'S5', riskScore: 3, riskLevel: 'low', mode: 'ground', eta: new Date(Date.now() + 6 * 3600 * 1000).toISOString() }
-];
-
-const summary = getFleetSummary(fleet);
-console.log('\n=== Fleet Summary ===');
-console.log(JSON.stringify(summary, null, 2));

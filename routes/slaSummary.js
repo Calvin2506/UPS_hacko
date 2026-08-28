@@ -1,4 +1,6 @@
 const { getFleetSummary, enrichShipmentWithSLA } = require('../slaEngine');
+const ROLE_PERMISSIONS = require('../config/rolePermissions');
+const { stripFields } = require('../utils/responseFilters');
 
 async function getShipmentsFromDB() {
   try {
@@ -14,8 +16,14 @@ async function getShipmentsFromDB() {
 
 async function slaSummaryHandler(req, res) {
   try {
+    const perms = ROLE_PERMISSIONS[req.userRole] || ROLE_PERMISSIONS.dispatcher;
     const shipments = await getShipmentsFromDB();
     const summary = getFleetSummary(shipments);
+    
+    if (!perms.canViewCost) {
+      return res.json(stripFields(summary, ['totalExposure', 'totalPotentialSavings', 'avgBreachProbability']));
+    }
+    
     res.json(summary);
   } catch (err) {
     console.error('SLA summary error:', err);

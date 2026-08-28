@@ -1,14 +1,23 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const riskRoutes = require('./riskRoutes');
+const shipmentRoutes = require('./routes/shipments');
+const { slaSummaryHandler } = require('./routes/slaSummary');
+const trafficRoutes = require('./routes/traffic');
+const { attachRole } = require('./middleware/roleMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
+app.use(attachRole);
 
 app.use('/api/risk', riskRoutes);
+app.use('/api', shipmentRoutes);
+app.get('/api/sla/summary', slaSummaryHandler);
+app.use('/api/traffic', trafficRoutes);
 
 app.get('/', (req, res) => {
   res.json({ 

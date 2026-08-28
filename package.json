@@ -5,7 +5,9 @@
   "main": "flightDelayEngine.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "client": "npm run dev --prefix client",
+    "dev": "concurrently -k -n api,client -c yellow,cyan \"npm start\" \"npm run client\""
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,10 @@
   "dependencies": {
     "axios": "^1.20.0",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }
