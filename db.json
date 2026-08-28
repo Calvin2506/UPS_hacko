@@ -1,0 +1,37 @@
+{
+  "shipments": [
+    {
+      "id": "SHP-2026-001",
+      "origin": "Shanghai",
+      "destination": "Los Angeles",
+      "originCountry": "China",
+      "destinationCountry": "USA",
+      "mode": "sea",
+      "eta": "2026-09-15T10:00:00.000Z",
+      "riskScore": 5,
+      "riskLevel": "medium"
+    },
+    {
+      "id": "SHP-2026-002",
+      "origin": "London",
+      "destination": "New York",
+      "originCountry": "UK",
+      "destinationCountry": "USA",
+      "mode": "air",
+      "eta": "2026-09-15T14:00:00.000Z",
+      "riskScore": 8,
+      "riskLevel": "high"
+    },
+    {
+      "id": "SHP-2026-003",
+      "origin": "Mumbai",
+      "destination": "Dubai",
+      "originCountry": "India",
+      "destinationCountry": "UAE",
+      "mode": "ground",
+      "eta": "2026-09-15T18:00:00.000Z",
+      "riskScore": 3,
+      "riskLevel": "low"
+    }
+  ]
+}

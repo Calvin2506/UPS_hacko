@@ -1,0 +1,74 @@
+{
+  "India": {
+    "baseRisk": 5,
+    "incidents": [
+      { "type": "port strike", "severity": 7 },
+      { "type": "border tension", "severity": 8 },
+      { "type": "regulatory change", "severity": 4 },
+      { "type": "customs backlog", "severity": 6 }
+    ]
+  },
+  "China": {
+    "baseRisk": 6,
+    "incidents": [
+      { "type": "port congestion", "severity": 7 },
+      { "type": "trade restriction", "severity": 8 },
+      { "type": "typhoon disruption", "severity": 6 },
+      { "type": "regulatory inspection", "severity": 5 }
+    ]
+  },
+  "USA": {
+    "baseRisk": 3,
+    "incidents": [
+      { "type": "port strike", "severity": 6 },
+      { "type": "customs delay", "severity": 4 },
+      { "type": "weather disruption", "severity": 5 },
+      { "type": "rail congestion", "severity": 4 }
+    ]
+  },
+  "UK": {
+    "baseRisk": 4,
+    "incidents": [
+      { "type": "border tension", "severity": 6 },
+      { "type": "customs backlog", "severity": 7 },
+      { "type": "port strike", "severity": 5 },
+      { "type": "regulatory change", "severity": 4 }
+    ]
+  },
+  "Germany": {
+    "baseRisk": 2,
+    "incidents": [
+      { "type": "rail strike", "severity": 5 },
+      { "type": "river level disruption", "severity": 4 },
+      { "type": "port congestion", "severity": 3 },
+      { "type": "regulatory inspection", "severity": 3 }
+    ]
+  },
+  "UAE": {
+    "baseRisk": 3,
+    "incidents": [
+      { "type": "port congestion", "severity": 5 },
+      { "type": "regulatory change", "severity": 4 },
+      { "type": "sandstorm disruption", "severity": 4 },
+      { "type": "customs delay", "severity": 3 }
+    ]
+  },
+  "Singapore": {
+    "baseRisk": 2,
+    "incidents": [
+      { "type": "port congestion", "severity": 6 },
+      { "type": "weather disruption", "severity": 4 },
+      { "type": "regulatory inspection", "severity": 3 },
+      { "type": "vessel queue", "severity": 5 }
+    ]
+  },
+  "Brazil": {
+    "baseRisk": 5,
+    "incidents": [
+      { "type": "port strike", "severity": 7 },
+      { "type": "customs backlog", "severity": 6 },
+      { "type": "regulatory change", "severity": 5 },
+      { "type": "road blockade", "severity": 6 }
+    ]
+  }
+}
